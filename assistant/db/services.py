@@ -1,4 +1,4 @@
-from assistant.db.dao import init_db, set_setting, get_setting
+from assistant.db.dao import init_db, set_setting, get_setting,insert_history, get_history as dao_get_history
 
 DEFAULT_CONFIG = {
     "default_shell": "bash",
@@ -31,3 +31,11 @@ def get_config(key: str) -> str | None:
         set_setting(key, DEFAULT_CONFIG[key])
         return DEFAULT_CONFIG[key]
     return val
+
+def save_history_if_enabled(query: str, command: str):
+    enabled = get_config("history_enabled") == "true"
+    if enabled:
+        insert_history(query, command)
+
+def get_history() -> list[tuple]:
+    return dao_get_history()
