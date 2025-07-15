@@ -1,6 +1,12 @@
 # Terminal Assistant
 
-**Terminal Assistant** is a smart CLI tool that converts natural language instructions into terminal commands using AI (OpenAI GPT). It supports dynamic shell preferences (bash, PowerShell, etc.), remembers your configuration, logs history, and optionally executes commands directly in your terminal.
+**Terminal Assistant** is a smart CLI tool that converts natural language instructions into terminal c| Key | Default | Description |
+|-----|---------|-------------|
+| default_shell | bash | Preferred shell to generate commands for |
+| default_model | gpt-4 | AI model used to process instructions |
+| allow_execution | false | If true, executes generated commands |
+| history_enabled | false | If true, saves the last 30 commands |
+| default_language | en | Language for AI prompts and UI messages (en, fr, es, de, it, pt, ru, zh, ja, ar) | using AI (OpenAI GPT). It supports dynamic shell preferences (bash, PowerShell, etc.), remembers your configuration, logs history, and optionally executes commands directly in your terminal.
 
 ---
 
@@ -8,7 +14,7 @@
 
 - Translate natural language into real shell commands
 - Supports multiple shells (bash, PowerShell, etc.)
-- Multi-language support for command generation and responses
+- **Multilingual interface** - supports 10 languages (English, French, Spanish, German, Italian, Portuguese, Russian, Chinese, Japanese, Arabic) for both AI prompts and UI messages
 - Persistent settings using SQLite
 - Command history (last 30 entries)
 - Optional command execution
@@ -31,8 +37,8 @@
 1. **Clone the project**
 
    ```bash
-   git clone https://github.com/ben4ali/CLI-AI-Assisant
-   cd CLI-AI-Assisant
+   git clone https://github.com/ben4ali/CLI-AI-Assitant
+   cd CLI-AI-Assitant
    ```
 
 2. **Create a virtual environment**
@@ -90,8 +96,28 @@ Use the `-config` flag to manage settings:
 python main.py -config set default_shell bash
 python main.py -config set default_model gpt-4
 python main.py -config set allow_execution true
-python main.py -config set default_language es  # Set language to Spanish
+python main.py -config set default_language fr  # Set to French
 ```
+
+#### Set Language for Multilingual Support
+
+The assistant supports 10 languages with both AI prompts and UI messages translated:
+
+```bash
+# Set to French
+python main.py -config set default_language fr
+
+# Set to Spanish  
+python main.py -config set default_language es
+
+# Set to German
+python main.py -config set default_language de
+
+# Other supported languages: en (English), it (Italian), pt (Portuguese), 
+# ru (Russian), zh (Chinese), ja (Japanese), ar (Arabic)
+```
+
+When you change the language, all interface messages (like "Processing your request", "Suggested Command", "Do you want to execute this command?") will appear in the selected language, and the AI will also generate responses in that language.
 
 #### Get a specific config value
 

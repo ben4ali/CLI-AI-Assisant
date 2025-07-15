@@ -1,7 +1,7 @@
 import sys
 from assistant.db.services import set_config, get_config, configure_shell, fetch_shell
 from assistant.utils.messages import print_error, print_success
-from assistant.prompts import get_supported_languages, get_language_name
+from assistant.prompts import get_supported_languages, get_language_name, get_ui_message
 
 VALID_SHELLS = ["bash", "powershell", "zsh"]
 VALID_MODELS = ["gpt-4", "gpt-3.5-turbo", "gpt-4o-mini"]
@@ -17,13 +17,13 @@ VALID_KEYS = {
 def run_config():
     args = sys.argv
     if len(args) < 3:
-        print_error("Usage: python main.py -config <get|set|list> [key] [value]")
+        print_error(get_ui_message("config_usage"))
         return
 
     action = args[2].lower()
 
     if action == "list":
-        print_success("Current configurations:")
+        print_success(get_ui_message("current_configs"))
         for key in VALID_KEYS.keys():
             val = get_config(key)
             if key == "default_language":
@@ -34,33 +34,35 @@ def run_config():
         return
 
     if action not in ["get", "set"]:
-        print_error("Invalid action. Use get, set or list.")
+        print_error(get_ui_message("invalid_action"))
         return
 
     if len(args) < 4:
-        print_error("Please specify the key.")
+        print_error(get_ui_message("specify_key"))
         return
 
     key = args[3].lower()
     if key not in VALID_KEYS:
-        print_error(f"Invalid config key. Valid keys: {', '.join(VALID_KEYS.keys())}")
+        error_msg = get_ui_message("invalid_config_key", keys=', '.join(VALID_KEYS.keys()))
+        print_error(error_msg)
         return
 
     if action == "get":
         val = get_config(key)
         if val is None:
-            print_error(f"No value set for '{key}'")
+            error_msg = get_ui_message("no_value_set", key=key)
+            print_error(error_msg)
         else:
             print_success(f"{key} = {val}")
         return
 
     if len(args) < 5:
-        print_error("Please specify a value to set.")
+        print_error(get_ui_message("specify_value"))
         return
 
     value = args[4].lower()
     if value not in VALID_KEYS[key]:
-        error_msg = f"Invalid value for {key}. Valid values: {', '.join(VALID_KEYS[key])}"
+        error_msg = get_ui_message("invalid_value", key=key, values=', '.join(VALID_KEYS[key]))
         if key == "default_language":
             from assistant.prompts import get_all_languages_info
             lang_info = get_all_languages_info()
@@ -75,4 +77,5 @@ def run_config():
     if key == "default_shell":
         configure_shell(value)
 
-    print_success(f"Configuration '{key}' set to '{value}'")
+    success_msg = get_ui_message("config_set", key=key, value=value)
+    print_success(success_msg)
