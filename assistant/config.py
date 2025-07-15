@@ -1,6 +1,7 @@
 import sys
 from assistant.db.services import set_config, get_config, configure_shell, fetch_shell
 from assistant.utils.messages import print_error, print_success
+from assistant.prompts import get_supported_languages, get_language_name
 
 VALID_SHELLS = ["bash", "powershell", "zsh"]
 VALID_MODELS = ["gpt-4", "gpt-3.5-turbo", "gpt-4o-mini"]
@@ -10,7 +11,7 @@ VALID_KEYS = {
     "default_model": VALID_MODELS,
     "allow_execution": VALID_BOOLEAN,
     "history_enabled": VALID_BOOLEAN,
-    "default_language": ["en", "fr", "es", "ar"]
+    "default_language": get_supported_languages()
 }
 
 def run_config():
@@ -25,7 +26,11 @@ def run_config():
         print_success("Current configurations:")
         for key in VALID_KEYS.keys():
             val = get_config(key)
-            print(f"- {key}: {val}")
+            if key == "default_language":
+                language_name = get_language_name(val) if val else "Unknown"
+                print(f"- {key}: {val} ({language_name})")
+            else:
+                print(f"- {key}: {val}")
         return
 
     if action not in ["get", "set"]:
@@ -55,7 +60,14 @@ def run_config():
 
     value = args[4].lower()
     if value not in VALID_KEYS[key]:
-        print_error(f"Invalid value for {key}. Valid values: {', '.join(VALID_KEYS[key])}")
+        error_msg = f"Invalid value for {key}. Valid values: {', '.join(VALID_KEYS[key])}"
+        if key == "default_language":
+            from assistant.prompts import get_all_languages_info
+            lang_info = get_all_languages_info()
+            error_msg += "\nAvailable languages:"
+            for code, name in lang_info.items():
+                error_msg += f"\n  - {code}: {name}"
+        print_error(error_msg)
         return
 
     set_config(key, value)

@@ -8,6 +8,7 @@
 
 - Translate natural language into real shell commands
 - Supports multiple shells (bash, PowerShell, etc.)
+- Multi-language support for command generation and responses
 - Persistent settings using SQLite
 - Command history (last 30 entries)
 - Optional command execution
@@ -89,6 +90,7 @@ Use the `-config` flag to manage settings:
 python main.py -config set default_shell bash
 python main.py -config set default_model gpt-4
 python main.py -config set allow_execution true
+python main.py -config set default_language es  # Set language to Spanish
 ```
 
 #### Get a specific config value
@@ -128,7 +130,7 @@ Example output:
 | default_model | gpt-4 | AI model used to process instructions |
 | allow_execution | false | If true, executes generated commands |
 | history_enabled | false | If true, saves the last 30 commands |
-| default_language | en | Language used for commands (future use) |
+| default_language | en | Language used for generating commands and responses |
 
 ---
 
