@@ -1,12 +1,6 @@
 # Terminal Assistant
 
-**Terminal Assistant** is a smart CLI tool that converts natural language instructions into terminal c| Key | Default | Description |
-|-----|---------|-------------|
-| default_shell | bash | Preferred shell to generate commands for |
-| default_model | gpt-4 | AI model used to process instructions |
-| allow_execution | false | If true, executes generated commands |
-| history_enabled | false | If true, saves the last 30 commands |
-| default_language | en | Language for AI prompts and UI messages (en, fr, es, de, it, pt, ru, zh, ja, ar) | using AI (OpenAI GPT). It supports dynamic shell preferences (bash, PowerShell, etc.), remembers your configuration, logs history, and optionally executes commands directly in your terminal.
+   **Terminal Assistant** is a smart CLI tool that converts natural language instructions into terminal
 
 ---
 
